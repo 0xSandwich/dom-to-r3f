@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import Banner from "./components/Banner";
+import Scene from "./components/Scene";
+import "./styles.css";
+import styled from "styled-components";
+import React, { useState, useEffect, useRef } from "react";
 
-function App() {
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  grid-gap: 100px;
+
+  & > div:nth-child(even) {
+    align-self: end;
+    flex-direction: row-reverse;
+  }
+`;
+
+export default function App() {
+  const items = [1, 2, 3, 4, 5, 6, 5, 4, 4, 5];
+  const itemsRef = useRef([]);
+  const childrenLength = itemsRef;
+
+  if (itemsRef.current.length !== childrenLength) {
+    itemsRef.current = Array(items.length)
+      .fill()
+      .map((_, i) => itemsRef.current[i] || React.createRef());
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>DOM images to Three.js</h1>
+      <StyledWrapper>
+        {items.map((v, i) => (
+          <Banner key={i} ref={itemsRef.current[i]} />
+        ))}
+      </StyledWrapper>
+      <Scene DomPlanes={itemsRef} />
     </div>
   );
 }
-
-export default App;
