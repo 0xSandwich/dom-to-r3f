@@ -1,5 +1,5 @@
 import Banner from "./components/Banner";
-import Scene from "./components/Scene";
+import CanvasWrapper from "./components/Canvas";
 import "./styles.css";
 import styled from "styled-components";
 import React, { useState, useEffect, useRef } from "react";
@@ -34,7 +34,7 @@ export default function App() {
           <Banner key={i} ref={itemsRef.current[i]} />
         ))}
       </StyledWrapper>
-      <Scene DomPlanes={itemsRef} />
+      <CanvasWrapper DomPlanes={itemsRef} />
     </div>
   );
 }

@@ -14,7 +14,7 @@ const Banner = React.forwardRef((props, ref) => {
   return (
     <StyledBanner>
       <img
-        style={{ opacity: 1 }}
+        style={{ opacity: 0.9 }}
         ref={ref}
         src="https://picsum.photos/300/150"
         alt="block"
