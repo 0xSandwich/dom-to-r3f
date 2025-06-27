@@ -2,7 +2,8 @@ import Banner from "./components/Banner";
 import CanvasWrapper from "./components/Canvas";
 import "./styles.css";
 import styled from "styled-components";
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+import { DomToFiberProvider } from "./contexts/DomToFiberContext";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -15,26 +16,29 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export default function App() {
+function AppContent() {
   const items = [1, 2, 3, 4, 5, 6, 5, 4, 4, 5];
-  const itemsRef = useRef([]);
-  const childrenLength = itemsRef;
-
-  if (itemsRef.current.length !== childrenLength) {
-    itemsRef.current = Array(items.length)
-      .fill()
-      .map((_, i) => itemsRef.current[i] || React.createRef());
-  }
 
   return (
     <div className="App">
       <h1>DOM images to Three.js</h1>
       <StyledWrapper>
         {items.map((v, i) => (
-          <Banner key={i} ref={itemsRef.current[i]} />
+          <Banner 
+            key={i} 
+            index={i}
+          />
         ))}
       </StyledWrapper>
-      <CanvasWrapper DomPlanes={itemsRef} />
+      <CanvasWrapper />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <DomToFiberProvider>
+      <AppContent />
+    </DomToFiberProvider>
   );
 }

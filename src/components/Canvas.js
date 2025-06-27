@@ -2,7 +2,7 @@ import React from "react";
 import Scene from "./Scene"
 import { Canvas } from "@react-three/fiber";
 
-const CanvasWrapper = ({ DomPlanes }) => {
+const CanvasWrapper = () => {
 
   return (
     <div
@@ -20,7 +20,7 @@ const CanvasWrapper = ({ DomPlanes }) => {
         shadows
         camera={{ zoom: 50, position: [0, 0, 100],isPerspectiveCamera: true }}
       >
-        <Scene DomPlanes={DomPlanes} />
+        <Scene />
       </Canvas>
     </div>
   );
