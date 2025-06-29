@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import { useLoader } from "@react-three/fiber";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { useLoader, useFrame } from "@react-three/fiber";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 
 const Plane = ({ element }) => {
@@ -9,6 +9,7 @@ const Plane = ({ element }) => {
 
   const [pos, setPos] = useState({ x: -3.32, y: 0 });
   const [size, setSize] = useState({ w: 7, h: 3.8 });
+  const materialRef = useRef();
 
   const getPlanePos = useCallback(() => {
     if (!element.current) return;
@@ -44,33 +45,58 @@ const Plane = ({ element }) => {
     return () => window.removeEventListener("resize", getPlanePos);
   }, [getPlanePos]);
 
-  // Memoize shaders to prevent recreation on every render
-  const fragmentShader = useMemo(() => `
-    varying vec2 vUv;
-    uniform sampler2D planeTexture;
-    void main() {
-        gl_FragColor = texture2D(planeTexture, vUv);
+  // Update uniforms in animation frame - generic approach
+  useFrame((state) => {
+    if (materialRef.current && element.uniforms) {
+      // Call custom uniform update function if provided
+      if (element.onUniformUpdate) {
+        element.onUniformUpdate(materialRef.current.uniforms, state);
+      }
+      
+      // Default time uniform update if it exists
+      if (materialRef.current.uniforms.time) {
+        materialRef.current.uniforms.time.value = state.clock.elapsedTime;
+      }
     }
-  `, []);
+  });
 
-  const vertexShader = useMemo(() => `
+  // Get shader props from the element (passed through FiberImage)
+  const vertexShader = element.vertexShader || `
     varying vec2 vUv;
     void main() {
         vUv = uv;
         gl_PointSize = 8.0;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
-  `, []);
+  `;
+
+  const fragmentShader = element.fragmentShader || `
+    varying vec2 vUv;
+    uniform sampler2D planeTexture;
+    void main() {
+        gl_FragColor = texture2D(planeTexture, vUv);
+    }
+  `;
 
   // Memoize uniforms to prevent recreation
-  const uniforms = useMemo(() => ({
-    planeTexture: { value: imageMap }
-  }), [imageMap]);
+  const uniforms = useMemo(() => {
+    const baseUniforms = {
+      planeTexture: { value: imageMap }
+    };
+    
+    // Merge with custom uniforms if provided
+    if (element.uniforms) {
+      return { ...baseUniforms, ...element.uniforms };
+    }
+    
+    return baseUniforms;
+  }, [imageMap, element.uniforms]);
 
   return (
     <mesh position={[pos.x, pos.y, 0]}>
       <planeGeometry attach="geometry" args={[size.w, size.h, 64, 64]} />
       <shaderMaterial
+        ref={materialRef}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}

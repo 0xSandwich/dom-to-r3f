@@ -4,6 +4,16 @@ import "./styles.css";
 import styled from "styled-components";
 import React from "react";
 import { DomToFiberProvider } from "./contexts/DomToFiberContext";
+import { 
+  WaveEffectExample, 
+  ColorShiftExample, 
+  DisplacementExample, 
+  PixelationExample, 
+  StyledOnlyExample, 
+  CurtainsWaveExample,
+  MouseDistortionExample,
+  AudioReactiveExample
+} from "./examples/ShaderExamples";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -17,7 +27,7 @@ const StyledWrapper = styled.div`
 `;
 
 function AppContent() {
-  const items = [1, 2, 3, 4, 5, 6, 5, 4, 4, 5];
+  const items = [1, 2, 3, 4, 5];
 
   return (
     <div className="App">
@@ -29,6 +39,16 @@ function AppContent() {
             index={i}
           />
         ))}
+        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', width: '100%'}}>
+          <WaveEffectExample index={5} />
+          <ColorShiftExample index={6} />
+          <DisplacementExample index={7} />
+          <PixelationExample index={8} />
+          <StyledOnlyExample index={9} />
+          <CurtainsWaveExample index={10} />
+          <MouseDistortionExample index={11} />
+          <AudioReactiveExample index={12} />
+        </div>
       </StyledWrapper>
       <CanvasWrapper />
     </div>

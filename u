@@ -1,0 +1,118 @@
+export const vertexShader = `
+  precision mediump float;
+      
+  attribute vec3 aVertexPosition;
+  attribute vec2 aTextureCoord;
+
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+
+  uniform mat4 planeTextureMatrix;
+
+  varying vec3 vVertexPosition;
+  varying vec2 vTextureCoord;
+
+  uniform float uPlaneDeformation;
+
+  void main() {
+    vec3 vertexPosition = aVertexPosition;
+
+    // cool effect on scroll
+    vertexPosition.y += sin(((vertexPosition.x + 1.0) / 2.0) * 3.141592) * (sin(uPlaneDeformation / 90.0));
+
+    gl_Position = uPMatrix * uMVMatrix * vec4(vertexPosition, 1.0);
+    
+    // varyings
+    vVertexPosition = aVertexPosition;
+    vTextureCoord = (planeTextureMatrix * vec4(aTextureCoord, 0.0, 1.0)).xy;
+  }
+`;
+
+export const fragmentShader = `
+  precision mediump float;
+
+  varying vec3 vVertexPosition;
+  varying vec2 vTextureCoord;
+  
+  uniform sampler2D planeTexture;
+  
+  void main() {
+    gl_FragColor = texture2D(planeTexture, vTextureCoord);
+  }
+`;
+
+import React from 'react';
+import { Plane } from 'react-curtains';
+import { Parallax } from 'react-scroll-parallax';
+import { useMediaQuery } from 'react-responsive';
+import { vertexShader, fragmentShader } from '../../assets/shaders/shaders'
+
+interface projectProps {
+    id:string;
+    title: string;
+    image: string;
+    target:string;
+    children: React.ReactNode;
+    isReverse?: boolean;
+    isLast?: boolean;
+    onPlaneReady:(plane:{
+      textures:{scale:{y:number, x:number}}[],
+      uniforms:{planeDeformation:{value:number}}
+    }) => void;
+}
+
+const CardProject = ({
+  id, title, image, children, isReverse, isLast, onPlaneReady, target,
+}:projectProps) => {
+  const uniforms = {
+    planeDeformation: {
+      name: 'uPlaneDeformation',
+      type: '1f',
+      value: 0,
+    },
+  };
+
+  const drawCheckMargins = {
+    top: 100,
+    right: 0,
+    bottom: 100,
+    left: 0,
+  };
+
+  const isMobile = useMediaQuery({ query: '(max-width: 800px)' })
+
+  return (
+    <a
+      className={`link-secondary group h-96 cursor-none place-content-start relative flex flex-col-reverse lg:flex-row gap-4 lg:gap-12 lg:items-end ${!isLast ? 'mb-9 lg:mb-96' : 'mb-16'} ${!isReverse && 'lg:flex-row-reverse'}`}
+      href={target}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <div className={`relative lg:w-1/3 ${isReverse && 'lg:text-right'}`}>
+
+        <Parallax speed={2}>
+          <h3 className="link-secondary text-white font-bold text-[2rem] lg:text-[5rem] leading-none z-10 mb-2  ">
+            {title}
+          </h3>
+        </Parallax>
+        <p className="link-secondary cursor-default text-light mt-2 z-10">{children}</p>
+        <Parallax speed={isMobile ? 0 : -5}>
+          <span className={`link-secondary hidden lg:block group-hover:text-corail transition-all duration-700 absolute font-serif text-dark text-[12rem] bottom-[14rem] ${!isReverse ? '-left-[12rem]' : '-right-[4rem]'}`}>{id}</span>
+        </Parallax>
+      </div>
+      <Plane
+        className="relative projectplane w-full z-10 "
+        onReady={onPlaneReady}
+        widthSegments={10}
+        heightSegments={10}
+        drawCheckMargins={drawCheckMargins}
+        uniforms={uniforms}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+      >
+        <img data-sampler="planeTexture" className="link-secondary w-full h-48 lg:h-96" src={image} alt={title} />
+      </Plane>
+    </a>
+  )
+}
+export default CardProject;
