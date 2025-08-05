@@ -2,6 +2,12 @@
 
 A React library for converting DOM elements to React Three Fiber components, enabling seamless integration between traditional DOM elements and 3D WebGL content.
 
+## 🚀 Live Demo
+
+**[View Live Demo](https://0xsandwich.github.io/dom-to-r3f/)**
+
+Experience the library in action with interactive shader effects, wave animations, and 3D image transformations.
+
 ## Installation
 
 ```bash

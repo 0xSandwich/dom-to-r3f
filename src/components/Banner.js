@@ -47,7 +47,7 @@ const Banner = forwardRef(({ index, ...props }, ref) => {
     <StyledBanner>
       <FiberImage
         ref={ref}
-        src={`/images/${index+1}.jpg`}
+        src={`images/${index+1}.jpg`}
         alt="block"
         index={index}
         vertexShader={customVertexShader}

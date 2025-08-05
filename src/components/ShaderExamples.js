@@ -40,7 +40,7 @@ export const WaveEffectExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/3.jpg"
+      src="images/3.jpg"
       alt="Wave effect"
       index={index}
       vertexShader={vertexShader}
@@ -90,7 +90,7 @@ export const ColorShiftExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/2.jpg"
+      src="images/2.jpg"
       alt="Color shift"
       index={index}
       vertexShader={vertexShader}
@@ -147,7 +147,7 @@ export const DisplacementExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/1.jpg"
+      src="images/1.jpg"
       alt="Displacement"
       index={index}
       vertexShader={vertexShader}
@@ -189,7 +189,7 @@ export const PixelationExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/4.jpg"
+      src="images/4.jpg"
       alt="Pixelation"
       index={index}
       vertexShader={vertexShader}
@@ -207,7 +207,7 @@ export const StyledOnlyExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/1.jpg"
+      src="images/1.jpg"
       alt="Styled only"
       index={index}
       styles={styles}
@@ -305,7 +305,7 @@ export const CurtainsWaveExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/2.jpg"
+      src="images/2.jpg"
       alt="Curtains wave effect"
       index={index}
       vertexShader={vertexShader}
@@ -391,7 +391,7 @@ export const MouseDistortionExample = React.memo(({ index }) => {
 
   return (
     <FiberImage
-      src="/images/3.jpg"
+      src="images/3.jpg"
       alt="Mouse distortion"
       index={index}
       vertexShader={vertexShader}
@@ -463,7 +463,7 @@ export const AudioReactiveExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="/images/4.jpg"
+      src="images/4.jpg"
       alt="Audio reactive"
       index={index}
       vertexShader={vertexShader}
