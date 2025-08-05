@@ -256,13 +256,10 @@ export const CurtainsWaveExample = React.memo(({ index }) => {
       uniforms.planeDeformation.value = planesDeformations.current;
     }
     
-    // Update texture scaling (like in curtains.js)
     if (uniforms.textureScale) {
       const scale = 1 + (planesDeformations.current / 300);
       uniforms.textureScale.value = [scale, scale];
     }
-
-    console.log(uniforms.planeDeformation.value);
   }, [lerp]);
 
   const vertexShader = `
