@@ -1,70 +1,188 @@
-# Getting Started with Create React App
+# dom-to-r3f
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React library for converting DOM elements to React Three Fiber components, enabling seamless integration between traditional DOM elements and 3D WebGL content.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+```bash
+npm install dom-to-r3f
+# or
+yarn add dom-to-r3f
+```
 
-### `npm start`
+## Peer Dependencies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This library requires the following peer dependencies:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install react react-dom @react-three/fiber three
+# or
+yarn add react react-dom @react-three/fiber three
+```
 
-### `npm test`
+## Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Wrap your app with DomToFiberProvider
 
-### `npm run build`
+```jsx
+import { DomToFiberProvider } from 'dom-to-r3f';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function App() {
+  return (
+    <DomToFiberProvider>
+      {/* Your entire app content */}
+    </DomToFiberProvider>
+  );
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. Use FiberImage for images you want in the three context.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```jsx
+import { FiberImage } from 'dom-to-r3f';
 
-### `npm run eject`
+<FiberImage 
+  src="/image.jpg"
+  alt="My 3D Image"
+  vertexShader="..." // optional
+  fragmentShader="..." // optional
+  uniforms={{}} // optional
+  onUniformUpdate={(uniforms, frame) => {}} // optional
+  styles={{}} // optional
+/>
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 3. Get scroll position with useScroll
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```jsx
+import { useScroll } from 'dom-to-r3f';
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+function MyComponent() {
+  const { scrollPosition } = useScroll();
+  
+  return (
+    <div>
+      {/* Your content */}
+    </div>
+  );
+}
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 4. Wrap your 3D scene with CanvasWrapper
 
-## Learn More
+```jsx
+import { CanvasWrapper } from 'dom-to-r3f';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<CanvasWrapper value={scrollPosition}>
+  {/* Your 3D elements */}
+  <mesh position={[0, scrollPosition, 0]}>
+    <boxGeometry />
+    <meshStandardMaterial />
+  </mesh>
+</CanvasWrapper>
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Complete Example
 
-### Code Splitting
+```jsx
+import React from 'react';
+import { DomToFiberProvider, FiberImage, useScroll, CanvasWrapper } from 'dom-to-r3f';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+function AppContent() {
+  const { scrollPosition } = useScroll();
+  
+  return (
+    <div>
+      {/* Your DOM content */}
+      <h1>My App</h1>
+      
+      {/* Images that will be recreated in 3D */}
+      <FiberImage 
+        src="/image1.jpg" 
+        alt="3D Image 1" 
+      />
+      <FiberImage 
+        src="/image2.jpg" 
+        alt="3D Image 2" 
+      />
+      
+      {/* 3D Scene */}
+      <CanvasWrapper value={scrollPosition}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 5]} intensity={1} />
+        
+        {/* Your 3D elements */}
+        <mesh position={[0, scrollPosition, 0]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="hotpink" />
+        </mesh>
+      </CanvasWrapper>
+    </div>
+  );
+}
 
-### Analyzing the Bundle Size
+export default function App() {
+  return (
+    <DomToFiberProvider>
+      <AppContent />
+    </DomToFiberProvider>
+  );
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Demo & Examples
 
-### Making a Progressive Web App
+This repository includes a complete demo showcasing various shader effects and implementations:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **Demo**: Located in `src/` - Run with `npm run start`
+- **Library Source**: Located in `src/lib/` - The actual library code
+- **Shader Examples**: Check `src/components/ShaderExamples.js` for advanced shader implementations
 
-### Advanced Configuration
+### Running the Demo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm install
+npm run start
+```
 
-### Deployment
+The demo includes examples of:
+- Wave effects
+- Color shifting
+- Displacement mapping
+- Pixelation effects
+- Mouse-based distortion
+- Audio-reactive effects
+- Curtains.js-style wave effects
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## API Reference
 
-### `npm run build` fails to minify
+### DomToFiberProvider
+Context provider that manages the DOM to Fiber conversion state. Wrap your entire app with this component.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### FiberImage
+Converts images to 3D textures in Three.js.
+
+**Props:**
+- `src` (string) - Image source URL
+- `alt` (string) - Image alt text
+- `vertexShader` (string, optional) - Custom vertex shader code
+- `fragmentShader` (string, optional) - Custom fragment shader code
+- `uniforms` (object, optional) - Custom uniforms object for shaders
+- `onUniformUpdate` (function, optional) - Callback for custom uniform updates
+- `styles` (object, optional) - Custom CSS styles
+
+### useScroll
+Hook that provides scroll position for 3D animations.
+
+**Returns:**
+- `scrollPosition` (number) - Current scroll position that can be used for 3D positioning
+
+### CanvasWrapper
+Wrapper component for React Three Fiber Canvas that renders FiberImages and additional 3D content.
+
+**Props:**
+- `value` (number) - Scroll position from useScroll hook
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

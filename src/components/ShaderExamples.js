@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import FiberImage from '../components/FiberImage';
+import FiberImage from '../lib/components/FiberImage';
 
 // Example 1: Basic wave effect with custom styles
 export const WaveEffectExample = React.memo(({ index }) => {

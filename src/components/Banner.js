@@ -1,6 +1,6 @@
 import React, { forwardRef, useMemo } from "react";
 import styled from "styled-components";
-import FiberImage from "./FiberImage";
+import FiberImage from "../lib/components/FiberImage";
 
 const StyledBanner = styled.div`
   display: flex;

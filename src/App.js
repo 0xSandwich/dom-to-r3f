@@ -1,9 +1,7 @@
 import Banner from "./components/Banner";
-import CanvasWrapper from "./components/Canvas";
 import "./styles.css";
 import styled from "styled-components";
 import React from "react";
-import { DomToFiberProvider } from "./contexts/DomToFiberContext";
 import { 
   WaveEffectExample, 
   ColorShiftExample, 
@@ -13,8 +11,9 @@ import {
   CurtainsWaveExample,
   MouseDistortionExample,
   AudioReactiveExample
-} from "./examples/ShaderExamples";
-import useScroll from "./hooks/useScroll";
+} from "./components/ShaderExamples";
+
+import {useScroll, CanvasWrapper, DomToFiberProvider} from "./lib";
 
 const StyledWrapper = styled.div`
   display: flex;
