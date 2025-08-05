@@ -13,9 +13,12 @@
     "start": "react-scripts start",
     "build": "rollup -c",
     "build:lib": "rollup -c",
+    "build:app": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepublishOnly": "npm run build:lib"
+    "prepublishOnly": "npm run build:lib",
+    "predeploy": "npm run build:app",
+    "deploy": "gh-pages -d build"
   },
   "peerDependencies": {
     "@react-three/fiber": "^8.0.0",
@@ -27,6 +30,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "gh-pages": "^6.3.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
@@ -62,7 +66,7 @@
   "bugs": {
     "url": "https://github.com/0xsandwich/dom-to-r3f/issues"
   },
-  "homepage": "https://github.com/0xsandwich/dom-to-r3f#readme",
+  "homepage": "https://0xsandwich.github.io/dom-to-r3f",
   "eslintConfig": {
     "extends": [
       "react-app",
