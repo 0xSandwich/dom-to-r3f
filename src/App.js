@@ -14,6 +14,7 @@ import {
   MouseDistortionExample,
   AudioReactiveExample
 } from "./examples/ShaderExamples";
+import useScroll from "./hooks/useScroll";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -28,7 +29,7 @@ const StyledWrapper = styled.div`
 
 function AppContent() {
   const items = [1, 2, 3, 4, 5];
-
+  const { scrollPosition } = useScroll();
   return (
     <div className="App">
       <h1>DOM images to Three.js</h1>
@@ -39,18 +40,42 @@ function AppContent() {
             index={i}
           />
         ))}
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', width: '100%'}}>
-          <WaveEffectExample index={5} />
-          <ColorShiftExample index={6} />
-          <DisplacementExample index={7} />
-          <PixelationExample index={8} />
-          <StyledOnlyExample index={9} />
-          <CurtainsWaveExample index={10} />
-          <MouseDistortionExample index={11} />
-          <AudioReactiveExample index={12} />
-        </div>
+      <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', width: '100%'}}>
+        <WaveEffectExample index={5} />
+        <ColorShiftExample index={6} />
+        <DisplacementExample index={7} />
+        <PixelationExample index={8} />
+        <StyledOnlyExample index={9} />
+        <CurtainsWaveExample index={10} />
+        <MouseDistortionExample index={11} />
+        <AudioReactiveExample index={12} />
+      </div>
       </StyledWrapper>
-      <CanvasWrapper />
+        <CanvasWrapper value={scrollPosition}>
+          <directionalLight
+          castShadow
+          position={[0,10,0]}
+          intensity={1.5}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+          shadow-camera-far={50}
+          shadow-camera-left = {-10}
+          shadow-camera-right = {10}
+          shadow-camera-top = {10}
+          shadow-camera-bottom = {-10}
+          />
+          <ambientLight />
+          <group position={[0, scrollPosition, 0]}>
+            <mesh  position={[5,-5,10]} rotation={[scrollPosition/4,scrollPosition/8,0]}>
+                <boxGeometry args={[3,3,3,3]} castShadow />
+                <meshStandardMaterial attach="material" color={"#6be092"} />
+            </mesh>
+            <mesh  position={[-3,-5,-10]} rotation={[scrollPosition/4,scrollPosition/8,0]}>
+                <boxGeometry args={[3,3,3,3]} castShadow />
+                <meshStandardMaterial attach="material" color={"#3f93d2"} />
+            </mesh>
+          </group>
+      </CanvasWrapper>
     </div>
   );
 }

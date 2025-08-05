@@ -1,9 +1,8 @@
 import React from "react";
-import Scene from "./Scene"
+import Renderer from "./Renderer";
 import { Canvas } from "@react-three/fiber";
 
-const CanvasWrapper = () => {
-
+const CanvasWrapper = ({ children, value }) => {
   return (
     <div
       style={{
@@ -20,7 +19,12 @@ const CanvasWrapper = () => {
         shadows
         camera={{ zoom: 50, position: [0, 0, 100],isPerspectiveCamera: true }}
       >
-        <Scene />
+        <scene>          
+          {children}
+          <group position={[0, value, 0]}>
+              <Renderer />
+          </group>
+        </scene>
       </Canvas>
     </div>
   );

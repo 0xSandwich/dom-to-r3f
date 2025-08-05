@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import normalizeBetweenTwoRanges from "./utils";
 
 export default function useWindowPosition() {
-  const [value, setValue] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const updatePosition = useCallback(() => {
     const container = document.body;
@@ -16,7 +16,7 @@ export default function useWindowPosition() {
       0,
       (containerEnd / 100) * 2
     );
-    setValue(normalizedValue);
+    setScrollPosition(normalizedValue);
   }, []);
 
   useEffect(() => {
@@ -25,5 +25,5 @@ export default function useWindowPosition() {
     return () => window.removeEventListener("scroll", updatePosition);
   }, [updatePosition]);
 
-  return { value };
+  return { scrollPosition };
 }

@@ -9,7 +9,6 @@ const Renderer = () => {
     const { getRefs } = useDomToFiberContext();
     
     const updateViewport = useCallback(() => {
-      console.log("update")
       camera.fov = Math.atan(window.innerHeight/2 / camera.position.z) *2 * THREE.MathUtils.RAD2DEG
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix()
@@ -25,7 +24,6 @@ const Renderer = () => {
     return (
         <group>
             {currentRefs.map((planeEl, index) => {
-                console.log('Rendering plane at index:', index, 'element:', planeEl);
                 return planeEl && <Plane element={planeEl} key={index} />;
             })}
         </group>

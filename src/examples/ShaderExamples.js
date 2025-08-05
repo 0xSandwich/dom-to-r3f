@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import FiberImage from '../components/FiberImage';
 
 // Example 1: Basic wave effect with custom styles
-export const WaveEffectExample = ({ index }) => {
+export const WaveEffectExample = React.memo(({ index }) => {
   const onUniformUpdate = useCallback((uniforms, state) => {
     if (uniforms.time) {
       uniforms.time.value = state.clock.elapsedTime;
@@ -40,7 +40,7 @@ export const WaveEffectExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/3.jpg"
       alt="Wave effect"
       index={index}
       vertexShader={vertexShader}
@@ -50,10 +50,10 @@ export const WaveEffectExample = ({ index }) => {
       styles={styles}
     />
   );
-};
+});
 
 // Example 2: Color shift effect with inline styles
-export const ColorShiftExample = ({ index }) => {
+export const ColorShiftExample = React.memo(({ index }) => {
   const onUniformUpdate = useCallback((uniforms, state) => {
     if (uniforms.time) {
       uniforms.time.value = state.clock.elapsedTime;
@@ -90,7 +90,7 @@ export const ColorShiftExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/2.jpg"
       alt="Color shift"
       index={index}
       vertexShader={vertexShader}
@@ -100,10 +100,10 @@ export const ColorShiftExample = ({ index }) => {
       style={inlineStyles}
     />
   );
-};
+});
 
 // Example 3: Displacement mapping with mixed styles
-export const DisplacementExample = ({ index }) => {
+export const DisplacementExample = React.memo(({ index }) => {
   const onUniformUpdate = useCallback((uniforms, state) => {
     if (uniforms.time) {
       uniforms.time.value = state.clock.elapsedTime;
@@ -147,7 +147,7 @@ export const DisplacementExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/1.jpg"
       alt="Displacement"
       index={index}
       vertexShader={vertexShader}
@@ -158,10 +158,10 @@ export const DisplacementExample = ({ index }) => {
       style={inlineStyles}
     />
   );
-};
+});
 
 // Example 4: Pixelation effect with minimal styles
-export const PixelationExample = ({ index }) => {
+export const PixelationExample = React.memo(({ index }) => {
   const vertexShader = `
     varying vec2 vUv;
     void main() {
@@ -189,7 +189,7 @@ export const PixelationExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/4.jpg"
       alt="Pixelation"
       index={index}
       vertexShader={vertexShader}
@@ -198,25 +198,25 @@ export const PixelationExample = ({ index }) => {
       styles={styles}
     />
   );
-};
+});
 
 // Example 5: No shader effects, just custom styling
-export const StyledOnlyExample = ({ index }) => {
+export const StyledOnlyExample = React.memo(({ index }) => {
   const styles = `
   `;
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/1.jpg"
       alt="Styled only"
       index={index}
       styles={styles}
     />
   );
-};
+});
 
 // Example 6: Curtains.js wave effect reproduction with user-controlled logic
-export const CurtainsWaveExample = ({ index }) => {
+export const CurtainsWaveExample = React.memo(({ index }) => {
   // Curtains.js style deformation tracking
   const planesDeformations = useRef(0);
   const lastScrollY = useRef(0);
@@ -261,6 +261,8 @@ export const CurtainsWaveExample = ({ index }) => {
       const scale = 1 + (planesDeformations.current / 300);
       uniforms.textureScale.value = [scale, scale];
     }
+
+    console.log(uniforms.planeDeformation.value);
   }, [lerp]);
 
   const vertexShader = `
@@ -303,7 +305,7 @@ export const CurtainsWaveExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/2.jpg"
       alt="Curtains wave effect"
       index={index}
       vertexShader={vertexShader}
@@ -313,10 +315,10 @@ export const CurtainsWaveExample = ({ index }) => {
       styles={styles}
     />
   );
-};
+});
 
 // Example 7: Mouse-based distortion effect
-export const MouseDistortionExample = ({ index }) => {
+export const MouseDistortionExample = React.memo(({ index }) => {
   const mousePosition = useRef({ x: 0, y: 0 });
 
   // Track mouse position
@@ -389,7 +391,7 @@ export const MouseDistortionExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/3.jpg"
       alt="Mouse distortion"
       index={index}
       vertexShader={vertexShader}
@@ -399,7 +401,7 @@ export const MouseDistortionExample = ({ index }) => {
       styles={styles}
     />
   );
-};
+});
 
 // Example 8: Audio-reactive effect (simulated)
 export const AudioReactiveExample = ({ index }) => {
@@ -461,7 +463,7 @@ export const AudioReactiveExample = ({ index }) => {
 
   return (
     <FiberImage
-      src="https://picsum.photos/400/200"
+      src="/images/4.jpg"
       alt="Audio reactive"
       index={index}
       vertexShader={vertexShader}

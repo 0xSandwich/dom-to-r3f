@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useLoader, useFrame } from "@react-three/fiber";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
 
@@ -13,7 +13,6 @@ const Plane = ({ element }) => {
 
   const getPlanePos = useCallback(() => {
     if (!element.current) return;
-    
     const boundingRect = element.current.getBoundingClientRect();
     const docWidth = window.innerWidth;
     const docHeight = window.innerHeight;
@@ -28,7 +27,6 @@ const Plane = ({ element }) => {
     const spaceY = (boundingRect.y / 100) * 2;
     // get scrolled height (in case of resize during scroll or refresh)
     const scrolledHeight = (window.pageYOffset / 100) * 2;
-    
     setSize({
       w: sizeX,
       h: sizeY
@@ -45,14 +43,23 @@ const Plane = ({ element }) => {
     return () => window.removeEventListener("resize", getPlanePos);
   }, [getPlanePos]);
 
+  // Always use the uniforms object from element (which is now stable)
+  const uniforms = element.uniforms;
+
+  // Always ensure planeTexture is present and up to date
+  useEffect(() => {
+    if (uniforms) {
+      uniforms.planeTexture = { value: imageMap };
+    }
+  }, [uniforms, imageMap]);
+
   // Update uniforms in animation frame - generic approach
   useFrame((state) => {
-    if (materialRef.current && element.uniforms) {
+    if (materialRef.current && uniforms) {
       // Call custom uniform update function if provided
       if (element.onUniformUpdate) {
         element.onUniformUpdate(materialRef.current.uniforms, state);
       }
-      
       // Default time uniform update if it exists
       if (materialRef.current.uniforms.time) {
         materialRef.current.uniforms.time.value = state.clock.elapsedTime;
@@ -77,20 +84,6 @@ const Plane = ({ element }) => {
         gl_FragColor = texture2D(planeTexture, vUv);
     }
   `;
-
-  // Memoize uniforms to prevent recreation
-  const uniforms = useMemo(() => {
-    const baseUniforms = {
-      planeTexture: { value: imageMap }
-    };
-    
-    // Merge with custom uniforms if provided
-    if (element.uniforms) {
-      return { ...baseUniforms, ...element.uniforms };
-    }
-    
-    return baseUniforms;
-  }, [imageMap, element.uniforms]);
 
   return (
     <mesh position={[pos.x, pos.y, 0]}>

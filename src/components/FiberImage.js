@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useMemo } from 'react';
+import React, { forwardRef, useCallback, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDomToFiberContext } from '../contexts/DomToFiberContext';
 
@@ -21,51 +21,66 @@ const StyledImage = styled.img`
  * @param {string|Object} [props.styles] - Custom CSS styles (string for CSS-in-JS, object for inline styles)
  * @param {React.Ref} ref - Forwarded ref
  */
-const FiberImage = forwardRef(({ 
-  src, 
-  alt, 
-  index, 
-  vertexShader, 
-  fragmentShader, 
-  uniforms, 
+const FiberImage = forwardRef(({
+  src,
+  alt,
+  index,
+  vertexShader,
+  fragmentShader,
+  uniforms = {},
   onUniformUpdate,
   styles,
-  ...props 
+  ...props
 }, ref) => {
   const { registerRef } = useDomToFiberContext();
-  
-  const setRef = useCallback((element) => {
-    // Call the forwardRef
-    if (typeof ref === 'function') {
-      ref(element);
-    } else if (ref) {
-      ref.current = element;
-    }
-    
-    // Register with our hook
-    if (element && registerRef) {
-      console.log('FiberImage registering element:', element, 'at index:', index);
-      registerRef(index, { 
-        current: element,
+  const uniformsRef = useRef();
+  const elementRef = useRef();
+
+  // Create the uniforms object only once
+  if (!uniformsRef.current) {
+    uniformsRef.current = { ...uniforms };
+  }
+
+  // Keep uniformsRef values in sync with incoming uniforms (but not the object reference)
+  useEffect(() => {
+    Object.keys(uniforms).forEach(key => {
+      uniformsRef.current[key] = uniforms[key];
+    });
+  }, [uniforms]);
+
+  // Register only once when the DOM element mounts
+  useEffect(() => {
+    if (elementRef.current && registerRef) {
+      registerRef(index, {
+        current: elementRef.current,
         vertexShader,
         fragmentShader,
-        uniforms,
+        uniforms: uniformsRef.current,
         onUniformUpdate
       });
     }
-  }, [ref, registerRef, index, vertexShader, fragmentShader, uniforms, onUniformUpdate]);
+    // No cleanup needed; registration is idempotent
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [registerRef, index, vertexShader, fragmentShader, onUniformUpdate]);
 
-  // Memoize the component to prevent unnecessary re-renders
-  const memoizedComponent = useMemo(() => (
+  // Forward the ref
+  const setRef = useCallback((el) => {
+    elementRef.current = el;
+    if (typeof ref === 'function') {
+      ref(el);
+    } else if (ref) {
+      ref.current = el;
+    }
+  }, [ref]);
+
+  return (
     <StyledImage
       ref={setRef}
       src={src}
       alt={alt}
       {...props}
     />
-  ), [setRef, src, alt, props]);
-
-  return memoizedComponent;
+  );
 });
 
 export default FiberImage; 

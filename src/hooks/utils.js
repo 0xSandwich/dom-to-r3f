@@ -1,9 +1,9 @@
 const normalizeBetweenTwoRanges = (
-  val: number,
-  minVal: number,
-  maxVal: number,
-  newMin: number,
-  newMax: number
+  val,
+  minVal,
+  maxVal,
+  newMin,
+  newMax
 ) => {
   const newVal =
     newMin + ((val - minVal) * (newMax - newMin)) / (maxVal - minVal);
