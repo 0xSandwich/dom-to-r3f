@@ -53,16 +53,16 @@
     "webgl",
     "canvas"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "0xSandwich",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/dom-to-r3f.git"
+    "url": "https://github.com/0xsandwich/dom-to-r3f.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/dom-to-r3f/issues"
+    "url": "https://github.com/0xsandwich/dom-to-r3f/issues"
   },
-  "homepage": "https://github.com/yourusername/dom-to-r3f#readme",
+  "homepage": "https://github.com/0xsandwich/dom-to-r3f#readme",
   "eslintConfig": {
     "extends": [
       "react-app",
